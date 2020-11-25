@@ -1,38 +1,112 @@
 import java.io.*;
-
+import java.util.List;
+import java.util.Scanner;
+import dictionary.*;
 public class Main {
 
+    public static void run() throws IOException {
+        Dictionary slangDictionary = new Dictionary();
+        slangDictionary.load("slang.txt");
+        int selection;
+        Scanner input = new Scanner(System.in);
+        // Menu
+        System.out.println("Choose from these choices");
+        System.out.println("-------------------------");
+        System.out.println("1 - Search meanings of a slang");
+        System.out.println("2 - Search slangs by meaning");
+        System.out.println("3 - Decrypt a number");
+        System.out.println("4 - Quit");
+
+        selection = input.nextInt();
+        input.nextLine();
+        switch (selection)
+        {
+            case 1:
+                System.out.println("Enter slang to search:");
+                String query1;
+                query1  = input.nextLine();
+                List<String> meanings = slangDictionary.searchSlang(query1);
+                if(meanings==null)
+                {
+                    System.out.println("Slang \"" + query1 + "\" is not found");
+                }
+                else {
+                    System.out.print(query1);
+                    StringBuilder res = new StringBuilder();
+                    res.append(": ");
+                    for (String i : meanings) {
+                        if (meanings.indexOf(i) != 0) res.append(" | ");
+                        res.append(i);
+                    }
+                    System.out.println(res);
+                    slangDictionary.saveSlangSearchHistory(query1,res);
+                }
+                break;
+
+            case 2:
+                System.out.println("Enter meanings to search:");
+                String query2;
+                query2  = input.nextLine();
+                List<String> slangs = slangDictionary.searchMeaning(query2);
+                if(slangs==null)
+                {
+                    System.out.println("Meanings \"" + query2 + "\" is not found");
+                }
+                else {
+                    System.out.print(query2);
+                    StringBuilder res = new StringBuilder();
+                    res.append(": ");
+                    for (String i : slangs) {
+                        if (slangs.indexOf(i) != 0) res.append(" | ");
+                        res.append(i);
+                    }
+                    System.out.println(res);
+                }
+                break;
+
+            case 3:
+                System.out.println("Search history:");
+                System.out.println("Slang: Meanings");
+                slangDictionary.showHistory();
+                break;
+
+            case 4:
+
+                break;
+
+            case 5:
+
+                break;
+
+            case 6:
+
+                break;
+
+            case 7:
+
+                break;
+
+            case 8:
+
+                break;
+
+            case 9:
+
+                break;
+
+            case 10:
+
+                break;
+            case 0:
+                break;
+            default:
+                break;
+        }
+
+    }
+
+
     public static void main(String[] args) throws IOException {
-	// write your code here
-//        try{
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader("slang.txt"));
-//            StringBuffer sb=new StringBuffer();    //constructs a string buffer with no characters
-//            String line;
-//            while((line=bufferedReader.readLine())!=null)
-//            {
-//                String[] combo = line.split("`");
-//                for(String i: combo)
-//                    System.out.println(i);
-//                sb.append(line);      //appends line to string buffer
-//                sb.append("\n");     //line feed
-//            }
-//
-//            System.out.println("Contents of File: ");
-////            System.out.println(sb.toString());
-//            //returns a string that textually represents the object
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        String s = "123467890`qwertyuiop";
-        String[] a = s.split("`");
-        String[] b = s.split("\\|");
-
-        for(String i:a)
-            System.out.println(i);
-        for(String i:b)
-            System.out.println(i);
-        System.out.println(s);
-
+        run();
     }
 }
