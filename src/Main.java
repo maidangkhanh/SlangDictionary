@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import dictionary.*;
@@ -14,8 +15,8 @@ public class Main {
         System.out.println("-------------------------");
         System.out.println("1 - Search meanings of a slang");
         System.out.println("2 - Search slangs by meaning");
-        System.out.println("3 - Decrypt a number");
-        System.out.println("4 - Quit");
+        System.out.println("3 - Show search history");
+        System.out.println("4 - Add slang word");
 
         selection = input.nextInt();
         input.nextLine();
@@ -48,8 +49,7 @@ public class Main {
                 String query2;
                 query2  = input.nextLine();
                 List<String> slangs = slangDictionary.searchMeaning(query2);
-                if(slangs==null)
-                {
+                if(slangs==null){
                     System.out.println("Meanings \"" + query2 + "\" is not found");
                 }
                 else {
@@ -71,7 +71,12 @@ public class Main {
                 break;
 
             case 4:
-
+                System.out.println("Enter a slang:");
+                String query4_1 = input.nextLine();
+                System.out.println("Enter its meanings:");
+                String query4_2 = input.nextLine();
+                List<String> list4 = Arrays.asList(query4_2.split("\\|"));
+                slangDictionary.addSlang(query4_1,list4);
                 break;
 
             case 5:

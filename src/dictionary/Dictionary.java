@@ -1,11 +1,8 @@
 package dictionary;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.io.*;
-import java.util.List;
 
 
 public class Dictionary {
@@ -13,9 +10,9 @@ public class Dictionary {
     static HashMap<String, List<String>> meaningDict = new HashMap<String, List<String>>();
     static final String slangDirectory = "slang.txt";
     static final String historyDirectory = "history.txt";
-    static final String meaningsDirectory = "meanings.txt";
+//    static final String meaningsDirectory = "meanings.txt";
 
-    public void load(String fileName) throws IOException {
+    public void load(String fileName){
         try{
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
             String line;
@@ -52,6 +49,30 @@ public class Dictionary {
             e.printStackTrace();
         }
     }
+
+    public void save(String fileName)
+    {
+        try{
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
+            StringBuffer stringBuffer = new StringBuffer();
+            for (String key: slangDict.keySet()){
+                stringBuffer.append(key);
+                stringBuffer.append("`");
+                for(String meaning: slangDict.get(key)){
+                    if (slangDict.get(key).indexOf(meaning)!=0) stringBuffer.append("\\|");
+                    stringBuffer.append(meaning);
+                }
+                stringBuffer.append(System.getProperty("line.separator"));
+            }
+            bufferedWriter.write(stringBuffer.toString());
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public List<String> searchSlang(String slang){
         List<String> res = null;
@@ -91,24 +112,65 @@ public class Dictionary {
         }
     }
 
-
-
-    public boolean addSlang(String slang, String meaning) {
-
-        if (slangDict.containsKey(slang)) {
-
-        } else {
-            List<String> meanings = new ArrayList<>();
-            meanings.add(meaning);
-            slangDict.put(slang, meanings);
-            return true;
+    public void addSlang(String slang, List<String> meanings){
+        if(slangDict.containsKey(slang))
+        {
+            System.out.println(slang +" has already existed.");
+            System.out.println("Choose an action:");
+            System.out.println("1 - Overwrite");
+            System.out.println("2 - Duplicate");
+            System.out.println("Any other keys - Cancel");
+            Scanner input = new Scanner(System.in);
+            int choice = input.nextInt();
+            input.nextLine();
+            switch (choice){
+                case 1:
+                    slangDict.put(slang,meanings);
+                    break;
+                case 2:
+                    List<String> values = slangDict.get(slang);
+                    values.addAll(meanings);
+                    break;
+                default:
+                    break;
+            }
         }
-        return false;
+        else
+        {
+            slangDict.put(slang,meanings);
+        }
     }
 
-    public void showAll()
-    {
-
+    public void editSlang(String slang){
+         if(slangDict.containsKey(slang)){
+             System.out.println("Enter new meanings:");
+             Scanner input = new Scanner(System.in);
+             String mean = input.nextLine();
+             List<String> list = Arrays.asList(mean.split("\\|"));
+             slangDict.put(slang,list);
+         }
+         else{
+             System.out.println(slang+" not in dictionary.");
+         }
     }
+
+    public void removeSlang(String slang){
+        if (slangDict.containsKey(slang)){
+            System.out.println("Confirm remove " + slang +" from dictionary");
+            System.out.print("(Y/N)");
+            Scanner input = new Scanner(System.in);
+            String choice = input.nextLine();
+            choice = choice.trim();
+            if(choice.equals("Y")) {
+                slangDict.remove(slang);
+                System.out.println(slang + " removed");
+            }
+        }
+        else{
+            System.out.println(slang+" not in dictionary.");
+        }
+    }
+
+
 
 }
