@@ -72,8 +72,20 @@ public class Dictionary {
         }
     }
 
+    public String display(String key){
+        key = key.toUpperCase();
+        List<String> meanings = slangDict.get(key);
+        StringBuilder res = new StringBuilder();
+        res.append(": ");
+        for (String i : meanings) {
+            if (meanings.indexOf(i) != 0) res.append(" | ");
+            res.append(i);
+        }
+        return key + res.toString();
+    }
 
     public List<String> searchSlang(String slang){
+        slang = slang.toUpperCase();
         List<String> res = null;
         if (slangDict.containsKey(slang))
         {
@@ -93,11 +105,11 @@ public class Dictionary {
 
     public void saveSlangSearchHistory(String query, StringBuilder result) throws IOException {
 
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(historyDirectory));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(historyDirectory,true));
         String stringBuffer = query +
                 result +
                 System.getProperty("line.separator");
-        bufferedWriter.append(stringBuffer);
+        bufferedWriter.write(stringBuffer);
         bufferedWriter.flush();
         bufferedWriter.close();
     }
@@ -121,6 +133,7 @@ public class Dictionary {
             System.out.println("2 - Duplicate");
             System.out.println("Any other keys - Cancel");
             Scanner input = new Scanner(System.in);
+            System.out.print("Your choice:");
             int choice = input.nextInt();
             input.nextLine();
             switch (choice){
@@ -142,12 +155,37 @@ public class Dictionary {
     }
 
     public void editSlang(String slang){
+        slang=slang.toUpperCase();
          if(slangDict.containsKey(slang)){
-             System.out.println("Enter new meanings:");
+             System.out.println(this.display(slang));
+             System.out.println("Choose an action:");
+             System.out.println("1 - Slang");
+             System.out.println("2 - Meanings");
+             System.out.println("Any other keys - Cancel");
+             System.out.print("Your choice:");
              Scanner input = new Scanner(System.in);
-             String mean = input.nextLine();
-             List<String> list = Arrays.asList(mean.split("\\|"));
-             slangDict.put(slang,list);
+             int choice = input.nextInt();
+             input.nextLine();
+
+             switch (choice){
+                 case 1:
+                     System.out.println("Enter new Slang:");
+                     String newsSlang = input.nextLine();
+                     slangDict.put(newsSlang.toUpperCase(),slangDict.get(slang));
+                     slangDict.remove(slang);
+                     break;
+                 case 2:
+                     System.out.println("Enter new meanings:");
+                     String newMean = input.nextLine();
+                     List<String> list = Arrays.asList(newMean.split("\\|"));
+                     slangDict.remove(slang);
+                     slangDict.put(slang,list);
+
+                     break;
+                 default:
+                     break;
+             }
+
          }
          else{
              System.out.println(slang+" not in dictionary.");
@@ -155,9 +193,12 @@ public class Dictionary {
     }
 
     public void removeSlang(String slang){
+        slang = slang.toUpperCase();
+
         if (slangDict.containsKey(slang)){
+            System.out.println(this.display(slang));
             System.out.println("Confirm remove " + slang +" from dictionary");
-            System.out.print("(Y/N)");
+            System.out.print("(Y/N): ");
             Scanner input = new Scanner(System.in);
             String choice = input.nextLine();
             choice = choice.trim();
@@ -179,8 +220,42 @@ public class Dictionary {
     public String randomSlang(){
         Random random = new Random();
         List<String> keys = new ArrayList<String>(slangDict.keySet());
-
         return keys.get(random.nextInt(keys.size()));
     }
 
+    public void quiz1(){
+        String slang = this.randomSlang();
+        String correctAnswer = slangDict.get(slang).get(0);
+        List<String> list = new ArrayList<>();
+        list.add(correctAnswer);
+        int opCount = 1;
+        do {
+            String option = slangDict.get(this.randomSlang()).get(0);
+            if(!list.contains(option)){
+                list.add(option);
+                opCount++;
+            }
+        }
+        while(opCount<4);
+
+        Collections.shuffle(list);
+
+        System.out.println("What does "+slang+" means?");
+        for(int i =0;i<4;i++)
+        {
+            System.out.println(i+1+" - "+list.get(i));
+        }
+        System.out.print("Your choice: ");
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+        input.nextLine();
+
+        if (choice == list.indexOf(correctAnswer)){
+            System.out.println("Correct");
+        }
+        else System.out.println("Wrong");
+
+
+
+    }
 }

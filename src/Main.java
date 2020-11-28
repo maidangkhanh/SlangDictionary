@@ -7,7 +7,7 @@ public class Main {
     static Dictionary slangDictionary = new Dictionary();
     public static void run() throws IOException {
 
-        slangDictionary.load("slang.txt");
+
         int selection;
         Scanner input = new Scanner(System.in);
         // Menu
@@ -88,11 +88,17 @@ public class Main {
                 break;
 
             case 5:
+                System.out.println("5 - Edit a slang word\nEnter a Slang");
+                String query5 = input.nextLine();
+                slangDictionary.editSlang(query5);
+                System.out.println("Operation is completed");
 
                 break;
 
             case 6:
-
+                System.out.println("6 - Remove a slang word\nEnter a Slang");
+                String query6 = input.nextLine();
+                slangDictionary.removeSlang(query6);
                 break;
 
             case 7:
@@ -123,6 +129,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+        slangDictionary.load("slang.txt");
         while(true)
         {
             run();
