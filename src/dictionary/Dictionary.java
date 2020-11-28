@@ -8,9 +8,8 @@ import java.io.*;
 public class Dictionary {
     static HashMap<String, List<String>> slangDict = new HashMap<String, List<String>>();
     static HashMap<String, List<String>> meaningDict = new HashMap<String, List<String>>();
-    static final String slangDirectory = "slang.txt";
+    static final String backupSlangDirectory = "backup.txt";
     static final String historyDirectory = "history.txt";
-//    static final String meaningsDirectory = "meanings.txt";
 
     public void load(String fileName){
         try{
@@ -171,6 +170,16 @@ public class Dictionary {
         }
     }
 
+    public void resetDictionary(){
+        this.load(backupSlangDirectory);
+    }
 
+
+    public String randomSlang(){
+        Random random = new Random();
+        List<String> keys = new ArrayList<String>(slangDict.keySet());
+
+        return keys.get(random.nextInt(keys.size()));
+    }
 
 }

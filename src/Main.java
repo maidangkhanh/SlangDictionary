@@ -77,6 +77,7 @@ public class Main {
                 String query4_2 = input.nextLine();
                 List<String> list4 = Arrays.asList(query4_2.split("\\|"));
                 slangDictionary.addSlang(query4_1,list4);
+                System.out.println("Operation is completed");
                 break;
 
             case 5:
