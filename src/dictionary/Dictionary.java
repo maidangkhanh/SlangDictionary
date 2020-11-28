@@ -112,6 +112,7 @@ public class Dictionary {
     }
 
     public void addSlang(String slang, List<String> meanings){
+        slang = slang.toUpperCase();
         if(slangDict.containsKey(slang))
         {
             System.out.println(slang +" has already existed.");

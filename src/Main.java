@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Scanner;
 import dictionary.*;
 public class Main {
-
+    static Dictionary slangDictionary = new Dictionary();
     public static void run() throws IOException {
-        Dictionary slangDictionary = new Dictionary();
+
         slangDictionary.load("slang.txt");
         int selection;
         Scanner input = new Scanner(System.in);
@@ -14,16 +14,24 @@ public class Main {
         System.out.println("Choose from these choices");
         System.out.println("-------------------------");
         System.out.println("1 - Search meanings of a slang");
-        System.out.println("2 - Search slangs by meaning");
+        System.out.println("2 - Search slang by meaning");
         System.out.println("3 - Show search history");
         System.out.println("4 - Add slang word");
+        System.out.println("5 - Edit a slang word");
+        System.out.println("6 - Remove a slang word");
+        System.out.println("7 - Reset dictionary");
+        System.out.println("8 - Random slang word");
+        System.out.println("9 - Quiz: What's that Slang");
+        System.out.println("10 - Quiz: What's that Mean");
+        System.out.println("0 - Save and exit\n");
+        System.out.print("Your choice: ");
 
         selection = input.nextInt();
         input.nextLine();
         switch (selection)
         {
             case 1:
-                System.out.println("Enter slang to search:");
+                System.out.println("1 - Search meanings of a slang\nEnter slang to search:");
                 String query1;
                 query1  = input.nextLine();
                 List<String> meanings = slangDictionary.searchSlang(query1);
@@ -45,7 +53,7 @@ public class Main {
                 break;
 
             case 2:
-                System.out.println("Enter meanings to search:");
+                System.out.println("2 - Search slang by meaning\nEnter meanings to search:");
                 String query2;
                 query2  = input.nextLine();
                 List<String> slangs = slangDictionary.searchMeaning(query2);
@@ -65,13 +73,12 @@ public class Main {
                 break;
 
             case 3:
-                System.out.println("Search history:");
-                System.out.println("Slang: Meanings");
+                System.out.println("3 - Show search history\nSearch history:");
                 slangDictionary.showHistory();
                 break;
 
             case 4:
-                System.out.println("Enter a slang:");
+                System.out.println("4 - Add slang word\nEnter a slang:");
                 String query4_1 = input.nextLine();
                 System.out.println("Enter its meanings:");
                 String query4_2 = input.nextLine();
@@ -104,15 +111,22 @@ public class Main {
 
                 break;
             case 0:
+                slangDictionary.save("slang.txt");
+                System.exit(0);
                 break;
             default:
                 break;
         }
-
+        System.out.println("\nPress ENTER to continue");
+        input.nextLine();
     }
 
 
     public static void main(String[] args) throws IOException {
-        run();
+        while(true)
+        {
+            run();
+        }
+
     }
 }
