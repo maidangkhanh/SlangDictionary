@@ -8,6 +8,7 @@ import java.io.*;
 public class Dictionary {
     static HashMap<String, List<String>> slangDict = new HashMap<String, List<String>>();
     static HashMap<String, List<String>> meaningDict = new HashMap<String, List<String>>();
+    static final String slangDirectory = "slang.txt";
     static final String backupSlangDirectory = "backup.txt";
     static final String historyDirectory = "history.txt";
 
@@ -20,10 +21,10 @@ public class Dictionary {
                 {
                     // Create slangDict
                     String[] combo = line.split("`");
-                    String key = combo[0];
+                    String key = combo[0]; // Get slang
                     String[] meanings = combo[1].split("\\|");
                     for(int i =0; i<meanings.length; i++){
-                        meanings[i]=meanings[i].trim();
+                        meanings[i]=meanings[i].trim(); // Get meaning
                     }
                     List<String> values = Arrays.asList(meanings);
                     slangDict.put(key, values);
@@ -58,7 +59,7 @@ public class Dictionary {
                 stringBuffer.append(key);
                 stringBuffer.append("`");
                 for(String meaning: slangDict.get(key)){
-                    if (slangDict.get(key).indexOf(meaning)!=0) stringBuffer.append("\\|");
+                    if (slangDict.get(key).indexOf(meaning)!=0) stringBuffer.append("|");
                     stringBuffer.append(meaning);
                 }
                 stringBuffer.append(System.getProperty("line.separator"));
@@ -72,6 +73,8 @@ public class Dictionary {
         }
     }
 
+
+    // Utility method to return a displayable string
     public String display(String key){
         key = key.toUpperCase();
         List<String> meanings = slangDict.get(key);
@@ -104,7 +107,6 @@ public class Dictionary {
     }
 
     public void saveSlangSearchHistory(String query, StringBuilder result) throws IOException {
-
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(historyDirectory,true));
         String stringBuffer = query +
                 result +
@@ -214,6 +216,7 @@ public class Dictionary {
 
     public void resetDictionary(){
         this.load(backupSlangDirectory);
+        this.save(slangDirectory);
     }
 
 
@@ -224,11 +227,14 @@ public class Dictionary {
     }
 
     public void quiz1(){
+        // init prompt and correct answer
         String slang = this.randomSlang();
         String correctAnswer = slangDict.get(slang).get(0);
         List<String> list = new ArrayList<>();
         list.add(correctAnswer);
         int opCount = 1;
+
+        // generate option
         do {
             String option = slangDict.get(this.randomSlang()).get(0);
             if(!list.contains(option)){
@@ -238,8 +244,10 @@ public class Dictionary {
         }
         while(opCount<4);
 
+        // randomize option
         Collections.shuffle(list);
 
+        // display
         System.out.println("What does "+slang+" means?");
         for(int i =0;i<4;i++)
         {
@@ -250,12 +258,54 @@ public class Dictionary {
         int choice = input.nextInt();
         input.nextLine();
 
-        if (choice == list.indexOf(correctAnswer)){
+        if (choice - 1 == list.indexOf(correctAnswer)){
             System.out.println("Correct");
         }
-        else System.out.println("Wrong");
+        else {
+            System.out.println("Wrong");
+            System.out.println("Correct answer: "+ correctAnswer);
+        }
+    }
 
+    public void quiz2(){
+        // init prompt and correct answer
+        String correctAnswer = this.randomSlang();
+        String meaning = slangDict.get(correctAnswer).get(0);
+        List<String> list = new ArrayList<>();
+        list.add(correctAnswer);
 
+        // generate option
+        int opCount = 1;
+        do {
+            String option = this.randomSlang();
+            if(!list.contains(option)){
+                list.add(option);
+                opCount++;
+            }
+        }
+        while(opCount<4);
+
+        // randomize option
+        Collections.shuffle(list);
+
+        // display
+        System.out.println("What is the slang for "+ meaning);
+        for(int i =0;i<4;i++)
+        {
+            System.out.println(i+1+" - "+list.get(i));
+        }
+        System.out.print("Your choice: ");
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+        input.nextLine();
+
+        if (choice - 1 == list.indexOf(correctAnswer)){
+            System.out.println("Correct");
+        }
+        else {
+            System.out.println("Wrong");
+            System.out.println("Correct answer: "+ correctAnswer);
+        }
 
     }
 }

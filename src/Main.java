@@ -102,19 +102,22 @@ public class Main {
                 break;
 
             case 7:
-
+                System.out.println("7 - Reset dictionary");
+                slangDictionary.resetDictionary();
                 break;
 
             case 8:
-
+                System.out.println("8 - Random slang word");
+                String r8 = slangDictionary.randomSlang();
+                System.out.println(slangDictionary.display(r8));
                 break;
 
             case 9:
-
+                slangDictionary.quiz1();
                 break;
 
             case 10:
-
+                slangDictionary.quiz2();
                 break;
             case 0:
                 slangDictionary.save("slang.txt");
