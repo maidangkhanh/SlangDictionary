@@ -1,6 +1,5 @@
 package dictionary;
 
-import java.io.IOException;
 import java.util.*;
 import java.io.*;
 
@@ -8,9 +7,28 @@ import java.io.*;
 public class Dictionary {
     static HashMap<String, List<String>> slangDict = new HashMap<String, List<String>>();
     static HashMap<String, List<String>> meaningDict = new HashMap<String, List<String>>();
-    static final String slangDirectory = "slang.txt";
-    static final String backupSlangDirectory = "backup.txt";
-    static final String historyDirectory = "history.txt";
+    static final String settings = "settings.ini";
+    public static String slangDirectory;
+    static String backupSlangDirectory;
+    static String historyDirectory;
+
+    public Dictionary()
+    {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(settings));
+            String line;
+            line=bufferedReader.readLine();
+            slangDirectory = line.trim();
+            line=bufferedReader.readLine();
+            historyDirectory = line.trim();
+            line=bufferedReader.readLine();
+            backupSlangDirectory = line.trim();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public void load(String fileName){
         try{
